@@ -1,8 +1,22 @@
 cluster:
-  # types of cluster in ["standalone"]
-  #type: standalone
-  type: sta
+  ##############################################
+  # common properties
+  ##############################################
+  # types of cluster in ["standalone", "zookeeper"]
+  type: zookeeper
   # id of cluster
   id: server1
+
+  ##############################################
+  # standalone properties
+  ##############################################
   standalone:
     alwaysAcquire: false
+
+  ##############################################
+  # standalone properties
+  ##############################################
+  zookeeper:
+    connectString: 192.168.79.130:2181
+    maxRetries: 3
+    sleepMsBetweenRetries: 100

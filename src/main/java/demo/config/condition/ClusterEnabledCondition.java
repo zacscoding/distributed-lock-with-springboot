@@ -11,12 +11,34 @@ import demo.constants.AppConstants.ClusterConstants;
  */
 public class ClusterEnabledCondition {
 
-    public static class StandAloneEnabledCondition implements Condition {
-
+    public static abstract class AbstractClusterEnabledCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return ClusterConstants.STANDALONE_TYPE.equals(
-                    context.getEnvironment().getProperty("cluster.type"));
+            return getRequiredClusterType().equals(context.getEnvironment().getProperty("cluster.type"));
+        }
+
+        abstract String getRequiredClusterType();
+    }
+
+    /**
+     * Condition of standalone
+     */
+    public static class StandAloneEnabledCondition extends AbstractClusterEnabledCondition {
+
+        @Override
+        String getRequiredClusterType() {
+            return ClusterConstants.TYPE_STANDALONE;
+        }
+    }
+
+    /**
+     * Condition of zookeeper
+     */
+    public static class ZookeeperEnabledCondition extends AbstractClusterEnabledCondition {
+
+        @Override
+        String getRequiredClusterType() {
+            return ClusterConstants.TYPE_ZOOKEEPER;
         }
     }
 }

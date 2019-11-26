@@ -9,7 +9,15 @@ public class AppConstants {
 
     public static class ClusterConstants {
 
-        public static String STANDALONE_TYPE = "standalone";
+        /**
+         * Type of standalone cluster
+         */
+        public static String TYPE_STANDALONE = "standalone";
+
+        /**
+         * Type of zookeeper cluster
+         */
+        public static String TYPE_ZOOKEEPER = "zookeeper";
 
     }
 }

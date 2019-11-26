@@ -27,6 +27,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // https://mvnrepository.com/artifact/org.apache.curator/curator-framework
+    compile 'org.apache.curator:curator-framework:4.2.0'
+    compile 'org.apache.curator:curator-recipes:4.2.0'
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -35,4 +40,16 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+bootRun {
+    // jvm options
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+
+    // arguments
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+')
+    }
 }

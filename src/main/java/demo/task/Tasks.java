@@ -44,15 +44,17 @@ public class Tasks {
                             continue;
                         }
 
-                        // do task
-                        sleepSeconds = random.nextInt(10) + 1;
-                        logger.info("[{}] acquire {} lock. start to do task during {} seconds."
-                                , cluster.getId(), taskId, sleepSeconds);
-                        TimeUnit.SECONDS.sleep(sleepSeconds);
-
-                        // release lock
-                        logger.info("[{}] release {} lock.", cluster.getId(), taskId);
-                        cluster.releaseLock(taskId);
+                        try {
+                            // do task
+                            sleepSeconds = random.nextInt(10) + 1;
+                            logger.info("[{}] acquire {} lock. start to do task during {} seconds."
+                                    , cluster.getId(), taskId, sleepSeconds);
+                            TimeUnit.SECONDS.sleep(sleepSeconds);
+                        } finally {
+                            // release lock
+                            logger.info("[{}] release {} lock.", cluster.getId(), taskId);
+                            cluster.releaseLock(taskId);
+                        }
                     }
                 } catch (Exception e) {
                     logger.warn("Exception occur while doing task[{}]", taskId, e);

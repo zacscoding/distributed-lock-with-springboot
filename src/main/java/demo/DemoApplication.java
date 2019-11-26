@@ -10,6 +10,7 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(
         excludeFilters = {
                 @Filter(type = FilterType.REGEX, pattern = "demo.cluster.standalone\\..*")
+                , @Filter(type = FilterType.REGEX, pattern = "demo.cluster.zookeeper\\..*")
         }
 )
 public class DemoApplication {

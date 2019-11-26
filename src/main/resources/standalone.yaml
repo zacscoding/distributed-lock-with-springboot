@@ -1,5 +1,6 @@
 cluster:
-  type: "standalone"
+  type: standalone
   id: server1
   standalone:
-    alwaysAcquire: true
+    alwaysAcquire: false
+

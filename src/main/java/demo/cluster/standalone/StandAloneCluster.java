@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import demo.cluster.Cluster;
 import demo.config.properties.ClusterProperties;
@@ -26,7 +27,7 @@ public class StandAloneCluster implements Cluster {
 
     @PostConstruct
     private void setUp() {
-        logger.info("## Enable standalone cluster. {}", properties);
+        logger.info("## Enable standalone cluster. {}\n{}", clusterProperties, properties);
     }
 
     @Override
@@ -36,18 +37,18 @@ public class StandAloneCluster implements Cluster {
 
     @Override
     public boolean acquireLock(String taskId, long timeout, TimeUnit timeUnit) {
-        if (timeout <= 0L) {
-            return properties.isAlwaysAcquire();
-        }
-
-        if (properties.isAlwaysAcquire()) {
-            return true;
-        }
+        Assert.isTrue(timeout >= 0L, "timeout must greater than or equal to 0");
+        requireNonNull(timeUnit, "timeUnit");
 
         try {
-            requireNonNull(timeUnit, "timeUnit").sleep(timeout);
+            if (properties.isAlwaysAcquire()) {
+                return true;
+            }
+
+            timeUnit.sleep(timeout);
         } catch (InterruptedException e) {
         }
+
         return false;
     }
 
