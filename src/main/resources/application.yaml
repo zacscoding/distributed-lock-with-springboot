@@ -1,0 +1,8 @@
+cluster:
+  # types of cluster in ["standalone"]
+  #type: standalone
+  type: sta
+  # id of cluster
+  id: server1
+  standalone:
+    alwaysAcquire: false

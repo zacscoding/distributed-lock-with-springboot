@@ -1,0 +1,5 @@
+cluster:
+  type: "standalone"
+  id: server1
+  standalone:
+    alwaysAcquire: true
