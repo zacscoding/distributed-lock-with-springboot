@@ -32,6 +32,10 @@ dependencies {
     compile 'org.apache.curator:curator-framework:4.2.0'
     compile 'org.apache.curator:curator-recipes:4.2.0'
 
+    // https://mvnrepository.com/artifact/org.redisson/redisson
+    compile 'org.redisson:redisson:3.11.5'
+
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

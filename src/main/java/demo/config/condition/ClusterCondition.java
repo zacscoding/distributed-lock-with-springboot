@@ -9,9 +9,9 @@ import demo.constants.AppConstants.ClusterConstants;
 /**
  * Determine component scan packages depends on cluster.type
  */
-public class ClusterEnabledCondition {
+public class ClusterCondition {
 
-    public static abstract class AbstractClusterEnabledCondition implements Condition {
+    public static abstract class AbstractClusterCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             return getRequiredClusterType().equals(context.getEnvironment().getProperty("cluster.type"));
@@ -23,7 +23,7 @@ public class ClusterEnabledCondition {
     /**
      * Condition of standalone
      */
-    public static class StandAloneEnabledCondition extends AbstractClusterEnabledCondition {
+    public static class StandAloneClusterCondition extends AbstractClusterCondition {
 
         @Override
         String getRequiredClusterType() {
@@ -34,11 +34,19 @@ public class ClusterEnabledCondition {
     /**
      * Condition of zookeeper
      */
-    public static class ZookeeperEnabledCondition extends AbstractClusterEnabledCondition {
+    public static class ZookeeperClusterCondition extends AbstractClusterCondition {
 
         @Override
         String getRequiredClusterType() {
             return ClusterConstants.TYPE_ZOOKEEPER;
+        }
+    }
+
+    public static class RedisClusterCondition extends AbstractClusterCondition {
+
+        @Override
+        String getRequiredClusterType() {
+            return ClusterConstants.TYPE_REDIS;
         }
     }
 }

@@ -12,12 +12,17 @@ public class AppConstants {
         /**
          * Type of standalone cluster
          */
-        public static String TYPE_STANDALONE = "standalone";
+        public static final String TYPE_STANDALONE = "standalone";
 
         /**
          * Type of zookeeper cluster
          */
-        public static String TYPE_ZOOKEEPER = "zookeeper";
+        public static final String TYPE_ZOOKEEPER = "zookeeper";
+
+        /**
+         * Type of redis cluster
+         */
+        public static final String TYPE_REDIS = "redis";
 
     }
 }

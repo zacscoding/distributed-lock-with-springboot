@@ -4,7 +4,7 @@ this is a demo project for acquiring a lock given task id in distributed applica
 ## Features  
 
 - [x] `Standalone cluster` : acquire locks depends on property.
-- [ ] `Radis cluster` : acquire locks by using redis.
+- [x] `Radis cluster` : acquire locks by using redis.
 - [x] `Zookeeper cluster` : acquire locks by using zookeeper.
 - [ ] `Raft cluster` : acquire locks by using raft algorithm.  
 
@@ -37,7 +37,9 @@ $ ./gradlew bootRun \
 ```aidl
 $ cd compose/zookeeper
 $ docker-compose up
-```
+```  
+
+> #### Running with zookeeper
 
 ```aidl
 // start server1
@@ -49,5 +51,32 @@ $ ./gradlew bootRun \
 $ ./gradlew bootRun \
       -PjvmArgs="-Dserver.port=8081 -Dcluster.id=server1" \
       -Pargs="--spring.config.location=classpath:/zookeeper.yaml"
+```
+
+---  
+
+
+
+> ### Running with redis
+
+> #### Start redis  
+
+```aidl
+$ cd compose/redis
+$ docker-compose up
+```  
+
+> #### Running with redis
+
+```aidl
+// start server1
+$ ./gradlew bootRun \
+    -PjvmArgs="-Dserver.port=8080 -Dcluster.id=server1" \
+    -Pargs="--spring.config.location=classpath:/redis.yaml"
+
+// start server2
+$ ./gradlew bootRun \
+      -PjvmArgs="-Dserver.port=8081 -Dcluster.id=server1" \
+      -Pargs="--spring.config.location=classpath:/redis.yaml"
 ```
 

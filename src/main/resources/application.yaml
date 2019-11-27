@@ -2,8 +2,8 @@ cluster:
   ##############################################
   # common properties
   ##############################################
-  # types of cluster in ["standalone", "zookeeper"]
-  type: zookeeper
+  # types of cluster in ["standalone", "zookeeper", "redis"]
+  type: redis
   # id of cluster
   id: server1
 
@@ -14,9 +14,17 @@ cluster:
     alwaysAcquire: false
 
   ##############################################
-  # standalone properties
+  # zookeeper properties
   ##############################################
   zookeeper:
     connectString: 192.168.79.130:2181
     maxRetries: 3
     sleepMsBetweenRetries: 100
+
+  ##############################################
+  # redis properties
+  ##############################################
+  redis:
+    # comma separated list of node addresses
+    address: "redis://192.168.79.130:6379"
+    idleConnectionTimeout: 10000

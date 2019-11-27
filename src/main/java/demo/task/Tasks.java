@@ -38,6 +38,7 @@ public class Tasks {
                         int sleepSeconds = random.nextInt(10) + 1;
                         TimeUnit.SECONDS.sleep(sleepSeconds);
 
+                        logger.info("[{}] try to acquire {} lock.", cluster.getId(), taskId);
                         // failed to acquire lock
                         if (!cluster.acquireLock(taskId, 5L, TimeUnit.SECONDS)) {
                             logger.info("[{}] failed to acquire {} lock", cluster.getId(), taskId);
@@ -47,12 +48,12 @@ public class Tasks {
                         try {
                             // do task
                             sleepSeconds = random.nextInt(10) + 1;
-                            logger.info("[{}] acquire {} lock. start to do task during {} seconds."
+                            logger.info(">>>>>>>>>> [{}] acquire {} lock. start to do task during {} seconds."
                                     , cluster.getId(), taskId, sleepSeconds);
                             TimeUnit.SECONDS.sleep(sleepSeconds);
                         } finally {
                             // release lock
-                            logger.info("[{}] release {} lock.", cluster.getId(), taskId);
+                            logger.info("<<<<<<<<<< [{}] release {} lock.", cluster.getId(), taskId);
                             cluster.releaseLock(taskId);
                         }
                     }

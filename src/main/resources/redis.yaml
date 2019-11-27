@@ -1,0 +1,6 @@
+cluster:
+  type: redis
+  id: server1
+  redis:
+    address: "redis://192.168.79.130:6379"
+    idleConnectionTimeout: 10000

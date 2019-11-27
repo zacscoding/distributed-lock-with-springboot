@@ -35,7 +35,7 @@ public class ZookeeperCluster implements Cluster {
 
     @PostConstruct
     private void setUp() {
-        logger.info("## Enable zookeeper cluster. {}\n{}", clusterProperties, zookeeperProperties);
+        logger.info("## Enable zookeeper cluster. {}, {}", clusterProperties, zookeeperProperties);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ZookeeperCluster implements Cluster {
     @Override
     public boolean acquireLock(String taskId, long timeout, TimeUnit timeUnit) {
         final InterProcessSemaphoreMutex mutex = createMutex(taskId);
-        Assert.isTrue(timeout >= 0L);
+        Assert.isTrue(timeout >= 0L, "timeout must greater than or equal to 0");
 
         try {
             if (mutex.acquire(timeout, timeUnit)) {

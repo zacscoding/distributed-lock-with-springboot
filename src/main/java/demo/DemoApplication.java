@@ -9,8 +9,7 @@ import org.springframework.context.annotation.FilterType;
 @SpringBootApplication
 @ComponentScan(
         excludeFilters = {
-                @Filter(type = FilterType.REGEX, pattern = "demo.cluster.standalone\\..*")
-                , @Filter(type = FilterType.REGEX, pattern = "demo.cluster.zookeeper\\..*")
+                @Filter(type = FilterType.REGEX, pattern = "demo.cluster\\..*")
         }
 )
 public class DemoApplication {

@@ -27,7 +27,7 @@ public class StandAloneCluster implements Cluster {
 
     @PostConstruct
     private void setUp() {
-        logger.info("## Enable standalone cluster. {}\n{}", clusterProperties, properties);
+        logger.info("## Enable standalone cluster. {}, {}", clusterProperties, properties);
     }
 
     @Override
