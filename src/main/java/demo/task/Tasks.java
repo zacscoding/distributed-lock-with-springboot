@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Tasks {
 
     private final String[] taskIds = {
-            "task01"
+            "task01", "task02", "task01"
     };
 
     private final Cluster cluster;
@@ -31,6 +31,9 @@ public class Tasks {
         for (final String taskId : taskIds) {
             Thread task = new Thread(() -> {
                 try {
+                    final String id = cluster.getId() + "-" + Thread.currentThread().getName();
+                    logger.info("Start {}", id);
+
                     while (!Thread.currentThread().isInterrupted()) {
                         final Random random = new Random();
 
@@ -38,10 +41,10 @@ public class Tasks {
                         int sleepSeconds = random.nextInt(10) + 1;
                         TimeUnit.SECONDS.sleep(sleepSeconds);
 
-                        logger.info("[{}] try to acquire {} lock.", cluster.getId(), taskId);
+                        logger.info("[{}] try to acquire {} lock.", id, taskId);
                         // failed to acquire lock
                         if (!cluster.acquireLock(taskId, 5L, TimeUnit.SECONDS)) {
-                            logger.info("[{}] failed to acquire {} lock", cluster.getId(), taskId);
+                            logger.info("[{}] failed to acquire {} lock", id, taskId);
                             continue;
                         }
 
@@ -49,11 +52,11 @@ public class Tasks {
                             // do task
                             sleepSeconds = random.nextInt(10) + 1;
                             logger.info(">>>>>>>>>> [{}] acquire {} lock. start to do task during {} seconds."
-                                    , cluster.getId(), taskId, sleepSeconds);
+                                    , id, taskId, sleepSeconds);
                             TimeUnit.SECONDS.sleep(sleepSeconds);
                         } finally {
                             // release lock
-                            logger.info("<<<<<<<<<< [{}] release {} lock.", cluster.getId(), taskId);
+                            logger.info("<<<<<<<<<< [{}] release {} lock.", id, taskId);
                             cluster.releaseLock(taskId);
                         }
                     }

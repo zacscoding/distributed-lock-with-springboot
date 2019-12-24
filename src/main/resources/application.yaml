@@ -3,7 +3,7 @@ cluster:
   # common properties
   ##############################################
   # types of cluster in ["standalone", "zookeeper", "redis"]
-  type: redis
+  type: standalone
   # id of cluster
   id: server1
 
@@ -11,7 +11,7 @@ cluster:
   # standalone properties
   ##############################################
   standalone:
-    alwaysAcquire: false
+    alwaysAcquire: true
 
   ##############################################
   # zookeeper properties

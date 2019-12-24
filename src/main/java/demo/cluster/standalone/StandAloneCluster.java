@@ -2,6 +2,8 @@ package demo.cluster.standalone;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +26,7 @@ public class StandAloneCluster implements Cluster {
 
     private final StandAloneClusterProperties properties;
     private final ClusterProperties clusterProperties;
+    private final ConcurrentHashMap<String, TaskLock> semaphoreMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void setUp() {
@@ -40,20 +43,69 @@ public class StandAloneCluster implements Cluster {
         Assert.isTrue(timeout >= 0L, "timeout must greater than or equal to 0");
         requireNonNull(timeUnit, "timeUnit");
 
+        if (!properties.isAlwaysAcquire()) {
+            return false;
+        }
+
         try {
-            if (properties.isAlwaysAcquire()) {
+            final TaskLock lock = getOrCreateSemaphore(taskId);
+
+            if (lock.getSemaphore().tryAcquire(timeout, timeUnit)) {
+                lock.onAcquired();
                 return true;
             }
 
-            timeUnit.sleep(timeout);
+            return false;
         } catch (InterruptedException e) {
+            return false;
         }
-
-        return false;
     }
 
     @Override
     public void releaseLock(String taskId) {
-        // do nothing
+        TaskLock lock = semaphoreMap.remove(taskId);
+
+        if (lock == null) {
+            return;
+        }
+
+        if (lock.isAcquiredThread()) {
+            logger.warn("Try to release with different thread");
+        }
+
+        lock.getSemaphore().release();
+    }
+
+    private TaskLock getOrCreateSemaphore(String taskId) {
+        return semaphoreMap.computeIfAbsent(taskId, (key) -> new TaskLock());
+    }
+
+    private static class TaskLock {
+
+        private final Semaphore semaphore;
+        private String threadName;
+        private Long threadId;
+        private long acuiqredTime;
+
+        public TaskLock() {
+            this.semaphore = new Semaphore(1);
+        }
+
+        public Semaphore getSemaphore() {
+            return semaphore;
+        }
+
+        public void onAcquired() {
+            final Thread acquiredThread = Thread.currentThread();
+
+            this.threadId = acquiredThread.getId();
+            this.threadName = acquiredThread.getName();
+            this.acuiqredTime = System.currentTimeMillis();
+        }
+
+        public boolean isAcquiredThread() {
+            final Thread thread = Thread.currentThread();
+            return threadName.equals(thread.getName()) && threadId == thread.getId();
+        }
     }
 }
